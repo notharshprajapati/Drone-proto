@@ -1,14 +1,12 @@
 import React from "react";
-// import { useTexture } from "@react-three/drei";
-// import * as THREE from "three";
+import { useTexture } from "@react-three/drei";
+import * as THREE from "three";
 
 export function Landscape(props) {
-  // Load the chess texture
-  // const chessTexture = useTexture("chess.jpg");
+  const chessTexture = useTexture("public/assets/textures/chess.jpg");
 
-  // Set the texture repeat values to control tiling
-  // chessTexture.wrapS = chessTexture.wrapT = THREE.RepeatWrapping;
-  // chessTexture.repeat.set(100, 100); // Adjust the values as needed
+  chessTexture.wrapS = chessTexture.wrapT = THREE.RepeatWrapping;
+  chessTexture.repeat.set(10, 10); // Adjust the values as needed
 
   return (
     <group {...props} dispose={null}>
@@ -19,7 +17,7 @@ export function Landscape(props) {
         receiveShadow
       >
         <planeGeometry />
-        {/* <meshStandardMaterial map={chessTexture} /> */}
+        <meshStandardMaterial map={chessTexture} />
       </mesh>
     </group>
   );

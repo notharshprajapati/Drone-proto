@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  PerspectiveCamera,
-  Environment,
-  OrbitControls,
-} from "@react-three/drei";
+import { PerspectiveCamera, Environment } from "@react-three/drei";
 import { SphereEnv } from "./SphereEnv";
 import { Landscape } from "./Landscape";
 import { Drone } from "./Drone";
