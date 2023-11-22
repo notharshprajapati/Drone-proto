@@ -15,7 +15,8 @@ function App() {
       <Environment background={false} files={"assets/textures/envmap.hdr"} />
       <PerspectiveCamera makeDefault />
       <Landscape receiveShadow />
-      <Drone castShadow receiveShadow />
+      <Drone />
+
       <directionalLight
         castShadow
         color={"#f3d29a"}

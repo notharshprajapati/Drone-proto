@@ -10,7 +10,6 @@ const z = new Vector3(0, 0, 1);
 
 export const planePosition = new Vector3(0, 0.1, -5);
 const delayedRotMatrix = new Matrix4();
-const delayedQuaternion = new Quaternion();
 
 export function Drone(props) {
   const { nodes, materials } = useGLTF("assets/models/drone.glb");
@@ -54,6 +53,8 @@ export function Drone(props) {
       .multiply(delayedRotMatrix)
       .multiply(new Matrix4().makeRotationX(0))
       .multiply(new Matrix4().makeTranslation(0, 1, 3));
+    // .multiply(new Matrix4().makeRotationX(0))
+    // .multiply(new Matrix4().makeTranslation(0, 0.46, 0.32));
 
     camera.matrixAutoUpdate = false;
     camera.matrix.copy(cameraMatrix);
@@ -67,7 +68,12 @@ export function Drone(props) {
   });
   return (
     <group {...props} dispose={null} ref={groupRef}>
-      <mesh geometry={nodes.Drone.geometry} material={materials["black out"]}>
+      <mesh
+        geometry={nodes.Drone.geometry}
+        material={materials["black out"]}
+        castShadow
+        receiveShadow
+      >
         {/* camera */}
         <mesh
           geometry={nodes.camBase.geometry}
