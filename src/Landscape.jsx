@@ -3,7 +3,7 @@ import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 export function Landscape(props) {
-  const chessTexture = useTexture("public/assets/textures/chess.jpg");
+  const chessTexture = useTexture("/assets/textures/chess.jpg");
 
   chessTexture.wrapS = chessTexture.wrapT = THREE.RepeatWrapping;
   chessTexture.repeat.set(10, 10); // Adjust the values as needed

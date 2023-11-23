@@ -5,7 +5,7 @@ import { useKeyboardControls } from "@react-three/drei";
 import * as THREE from "three";
 
 export function Drone(props) {
-  const { nodes, materials } = useGLTF("public/assets/models/drone.glb");
+  const { nodes, materials } = useGLTF("/assets/models/drone.glb");
 
   //refs
   const body = useRef();
@@ -97,7 +97,12 @@ export function Drone(props) {
   });
   return (
     <group {...props} dispose={null} ref={body}>
-      <mesh geometry={nodes.body.geometry} material={materials.body}>
+      <mesh
+        geometry={nodes.body.geometry}
+        material={materials.body}
+        castShadow
+        receiveShadow
+      >
         <mesh
           geometry={nodes.blue.geometry}
           material={materials.blue}
@@ -143,4 +148,4 @@ export function Drone(props) {
   );
 }
 
-useGLTF.preload("public/assets/models/drone.glb");
+useGLTF.preload("/assets/models/drone.glb");

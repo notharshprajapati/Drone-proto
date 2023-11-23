@@ -3,6 +3,7 @@ import { PerspectiveCamera, Environment } from "@react-three/drei";
 import { SphereEnv } from "./SphereEnv";
 import { Landscape } from "./Landscape";
 import { Drone } from "./Drone";
+import { Podium1 } from "./Podium1";
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       <SphereEnv />
       <Environment background={false} files={"assets/textures/envmap.hdr"} />
       <PerspectiveCamera makeDefault />
-      <Landscape receiveShadow />
+      <Landscape />
+      <Podium1 position={[-2, 0, -10]} rotation={[0, 0.5, 0]} />
       <Drone />
 
       <directionalLight
