@@ -9,11 +9,13 @@ export function Podium1(props) {
         geometry={nodes.Podium_1.geometry}
         material={materials["mid grey"]}
         position={[0, 0.2, 0]}
+        castShadow
       >
         <group position={[0, 0.3, 0]}>
           <mesh
             geometry={nodes.Body_1.geometry}
             material={materials["off white"]}
+            castShadow
           />
           <mesh
             geometry={nodes.Body_2.geometry}

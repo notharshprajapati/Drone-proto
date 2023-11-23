@@ -15,12 +15,9 @@ export function Drone(props) {
   const wing4 = useRef();
 
   //smooth cam variables
-  const [smoothedCameraPosition] = useState(
-    () => new THREE.Vector3(10, 10, 10)
-  );
-  const [smoothedCameraTarget] = useState(() => new THREE.Vector3());
+  const [smoothedCameraPosition] = useState(() => new THREE.Vector3(0, 1.5, 3));
+  const [smoothedCameraTarget] = useState(() => new THREE.Vector3(0, 1.5, 0));
   const [subscribeKeys, getKeys] = useKeyboardControls(); //controller
-
   useFrame((state, delta) => {
     /**
      * Controls
@@ -28,29 +25,29 @@ export function Drone(props) {
     const { forward, backward, leftward, rightward, reset, up, down } =
       getKeys();
 
-    if (forward) {
+    if (forward && body.current.position.z > -100) {
       if (body.current.rotation.x > -0.25) body.current.rotation.x -= 0.025;
       body.current.position.z -= 0.1;
     }
-    if (backward) {
+    if (backward && body.current.position.z < 5) {
       if (body.current.rotation.x < 0.25) body.current.rotation.x += 0.025;
       body.current.position.z += 0.1;
     }
-    if (rightward) {
+    if (rightward && body.current.position.x < 1) {
       if (body.current.rotation.z > -0.25) body.current.rotation.z -= 0.025;
       body.current.position.x += 0.1;
     }
-    if (leftward) {
+    if (leftward && body.current.position.x > -1) {
       if (body.current.rotation.z < 0.25) body.current.rotation.z += 0.025;
       body.current.position.x -= 0.1;
     }
 
-    if (up) body.current.position.y += 0.025;
-    if (down && body.current.position.y > 0) body.current.position.y -= 0.025;
+    if (up && body.current.position.y < 5) body.current.position.y += 0.025;
+    if (down && body.current.position.y > 0) body.current.position.y -= 0.05;
 
     if (reset) {
       body.current.rotation.set(0, 0, 0);
-      body.current.position.set(0, 0, 0);
+      body.current.position.set(0, 0.5, 0);
     }
     // revert
     if (body.current.rotation.x != 0) {
@@ -80,8 +77,8 @@ export function Drone(props) {
     cameraTarget.copy(bodyPosition);
     cameraTarget.y += 1;
 
-    smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
-    smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
+    smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
+    smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
 
     state.camera.position.copy(smoothedCameraPosition);
     state.camera.lookAt(smoothedCameraTarget);
@@ -89,20 +86,16 @@ export function Drone(props) {
     /**
      * wing rotation
      */
-
-    wing1.current.rotation.y -= 1;
-    wing2.current.rotation.y += 1;
-    wing3.current.rotation.y -= 1;
-    wing4.current.rotation.y += 1;
+    if (body.current.position.y > 0) {
+      wing1.current.rotation.y += 1;
+      wing2.current.rotation.y += 1;
+      wing3.current.rotation.y += 1;
+      wing4.current.rotation.y += 1;
+    }
   });
   return (
     <group {...props} dispose={null} ref={body}>
-      <mesh
-        geometry={nodes.body.geometry}
-        material={materials.body}
-        castShadow
-        receiveShadow
-      >
+      <mesh geometry={nodes.body.geometry} material={materials.body} castShadow>
         <mesh
           geometry={nodes.blue.geometry}
           material={materials.blue}

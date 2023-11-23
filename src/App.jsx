@@ -1,19 +1,29 @@
 import React from "react";
 import { PerspectiveCamera, Environment } from "@react-three/drei";
-import { SphereEnv } from "./SphereEnv";
-import { Landscape } from "./Landscape";
-import { Drone } from "./Drone";
-import { Podium1 } from "./Podium1";
+import { SphereEnv } from "./models/SphereEnv";
+import { Landscape } from "./models/Landscape";
+import { Drone } from "./models/Drone";
+import { Podium1 } from "./models/Podium1";
+import { Pod2 } from "./models/Pod2";
+import { Ctlrs } from "./Ctrls";
 
 function App() {
   return (
     <>
       <SphereEnv />
       <Environment background={false} files={"assets/textures/envmap.hdr"} />
-      <PerspectiveCamera makeDefault />
-      <Landscape />
+      <PerspectiveCamera makeDefault position={[0, 0, 10]}>
+        <mesh>
+          <sphereBufferGeometry args={[15]} />
+          <meshBasicMaterial color="black" side={2} />
+        </mesh>
+      </PerspectiveCamera>
+
+      <Landscape position={[0, 0, -45]} />
+      <Ctlrs />
       <Podium1 position={[-2, 0, -10]} rotation={[0, 0.5, 0]} />
-      <Drone />
+      <Pod2 position={[0, 0.05, -30]} />
+      <Drone position={[0, 0.5, 5]} />
 
       <directionalLight
         castShadow

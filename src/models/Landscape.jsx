@@ -15,6 +15,7 @@ export function Landscape(props) {
         rotation={[-Math.PI * 0.5, 0, 0]}
         scale={[100, 100, 100]}
         receiveShadow
+        tranparent={true}
       >
         <planeGeometry />
         <meshStandardMaterial map={chessTexture} />
