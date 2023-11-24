@@ -8,13 +8,16 @@ import { KeyboardControls } from "@react-three/drei";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <KeyboardControls
     map={[
-      { name: "forward", keys: ["KeyW"] },
-      { name: "backward", keys: ["KeyS"] },
-      { name: "leftward", keys: ["KeyA"] },
-      { name: "rightward", keys: ["KeyD"] },
+      { name: "upward", keys: ["KeyW"] },
+      { name: "downward", keys: ["KeyS"] },
+      { name: "pitchLeft", keys: ["KeyA"] },
+      { name: "pitchRight", keys: ["KeyD"] },
+      { name: "forward", keys: ["ArrowUp"] },
+      { name: "backward", keys: ["ArrowDown"] },
+      { name: "leftward", keys: ["ArrowLeft"] },
+      { name: "rightward", keys: ["ArrowRight"] },
       { name: "reset", keys: ["KeyR"] },
-      { name: "up", keys: ["Shift"] },
-      { name: "down", keys: ["Control"] },
+      { name: "shift", keys: ["Shift"] },
     ]}
   >
     <Canvas shadows>

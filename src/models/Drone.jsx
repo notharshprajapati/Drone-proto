@@ -3,7 +3,6 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import * as THREE from "three";
-
 export function Drone(props) {
   const { nodes, materials } = useGLTF("/assets/models/drone.glb");
 
@@ -18,20 +17,31 @@ export function Drone(props) {
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(0, 1.5, 3));
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3(0, 1.5, 0));
   const [subscribeKeys, getKeys] = useKeyboardControls(); //controller
+  let boost = 1;
   useFrame((state, delta) => {
     /**
      * Controls
      */
-    const { forward, backward, leftward, rightward, reset, up, down } =
-      getKeys();
-
+    const {
+      upward,
+      downward,
+      pitchLeft,
+      pitchRight,
+      forward,
+      backward,
+      leftward,
+      rightward,
+      reset,
+      shift,
+    } = getKeys();
     if (forward && body.current.position.z > -100) {
       if (body.current.rotation.x > -0.25) body.current.rotation.x -= 0.025;
-      body.current.position.z -= 0.1;
+      body.current.position.z -= 0.1 * boost;
     }
+
     if (backward && body.current.position.z < 5) {
       if (body.current.rotation.x < 0.25) body.current.rotation.x += 0.025;
-      body.current.position.z += 0.1;
+      body.current.position.z += 0.1 * boost;
     }
     if (rightward && body.current.position.x < 1) {
       if (body.current.rotation.z > -0.25) body.current.rotation.z -= 0.025;
@@ -42,13 +52,23 @@ export function Drone(props) {
       body.current.position.x -= 0.1;
     }
 
-    if (up && body.current.position.y < 5) body.current.position.y += 0.025;
-    if (down && body.current.position.y > 0) body.current.position.y -= 0.05;
+    if (upward && body.current.position.y < 5) body.current.position.y += 0.025;
+    if (downward && body.current.position.y > 0)
+      body.current.position.y -= 0.05;
 
+    if (shift && boost < 2) {
+      boost += 0.1;
+    } else {
+      if (boost > 1) boost -= 0.025;
+    }
     if (reset) {
       body.current.rotation.set(0, 0, 0);
       body.current.position.set(0, 0.5, 0);
     }
+
+    if (pitchLeft) body.current.rotation.y += 0.05;
+    if (pitchRight) body.current.rotation.y -= 0.05;
+
     // revert
     if (body.current.rotation.x != 0) {
       if (!forward && body.current.rotation.x < 0)
@@ -68,17 +88,23 @@ export function Drone(props) {
      */
     const bodyPosition = body.current.position;
 
-    const cameraPosition = new THREE.Vector3();
-    cameraPosition.copy(bodyPosition);
-    cameraPosition.z += 3;
-    cameraPosition.y += 1;
+    const radius = 3; // adjust this value based on your scene size
+    const angle = body.current.rotation.y;
 
-    const cameraTarget = new THREE.Vector3();
-    cameraTarget.copy(bodyPosition);
-    cameraTarget.y += 1;
+    const cameraPosition = new THREE.Vector3(
+      bodyPosition.x + radius * Math.sin(angle),
+      bodyPosition.y + 1,
+      bodyPosition.z + radius * Math.cos(angle)
+    );
 
-    smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
-    smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
+    const cameraTarget = new THREE.Vector3(
+      bodyPosition.x,
+      bodyPosition.y + 1,
+      bodyPosition.z
+    );
+
+    smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
+    smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
 
     state.camera.position.copy(smoothedCameraPosition);
     state.camera.lookAt(smoothedCameraTarget);
