@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import "./index.css";
 import App from "./App";
 import { KeyboardControls } from "@react-three/drei";
+import Interface from "./Interface";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <KeyboardControls
@@ -17,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       { name: "leftward", keys: ["ArrowLeft"] },
       { name: "rightward", keys: ["ArrowRight"] },
       { name: "reset", keys: ["KeyR"] },
-      { name: "shift", keys: ["Shift"] },
+      { name: "boost", keys: ["Shift"] },
     ]}
   >
     <Canvas shadows>
@@ -25,5 +26,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <App />
       </Suspense>
     </Canvas>
+    <Interface />
   </KeyboardControls>
 );

@@ -5,7 +5,6 @@ import { Landscape } from "./models/Landscape";
 import { Drone } from "./models/Drone";
 import { Podium1 } from "./models/Podium1";
 import { Pod2 } from "./models/Pod2";
-import { Ctlrs } from "./models/Ctrls";
 import { PinkForest } from "./models/PinkForest";
 import { Forest } from "./models/Forest";
 import { Parts } from "./models/Parts";
@@ -22,7 +21,6 @@ function App() {
         </mesh>
       </PerspectiveCamera>
       <Landscape position={[0, 0, -95]} />
-      <Ctlrs scale={[1, 1, 0.1]} />
       <Podium1 position={[-2, 0, -10]} rotation={[0, 0.5, 0]} />
       <Pod2 position={[0, 0.05, -30]} />
       <PinkForest position={[0, -1, -50]} /> <Forest position={[0, -1, -70]} />
