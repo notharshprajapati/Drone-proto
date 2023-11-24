@@ -39,78 +39,54 @@ export function Drone(props) {
     /**
      * Movement
      */
-
-    //forward
+    if (pitchLeft) body.current.rotation.y += 0.05;
+    if (pitchRight) body.current.rotation.y -= 0.05;
     if (forward) {
-      //rotation
       if (bodRot.current.rotation.x > -0.25) bodRot.current.rotation.x -= 0.025;
-      //movement
       const angle = body.current.rotation.y;
       body.current.position.x -= speed * Math.sin(angle);
       body.current.position.z -= speed * Math.cos(angle);
     }
-
-    //backward
     if (backward) {
-      //rotation
       if (bodRot.current.rotation.x < 0.25) bodRot.current.rotation.x += 0.025;
-      //movement
       const angle = body.current.rotation.y;
       body.current.position.x += speed * Math.sin(angle);
       body.current.position.z += speed * Math.cos(angle);
     }
-
-    //leftward
     if (leftward) {
-      //rotation
       if (bodRot.current.rotation.z < 0.25) bodRot.current.rotation.z += 0.025;
-      //movement
       const angle = body.current.rotation.y;
       body.current.position.x -= speed * Math.cos(angle);
       body.current.position.z += speed * Math.sin(angle);
     }
-
-    //rightward
     if (rightward) {
-      //rotation
       if (bodRot.current.rotation.z > -0.25) bodRot.current.rotation.z -= 0.025;
-      //movement
       const angle = body.current.rotation.y;
       body.current.position.x += speed * Math.cos(angle);
       body.current.position.z -= speed * Math.sin(angle);
     }
-
     if (upward && body.current.position.y < 5) body.current.position.y += 0.025;
     if (downward && body.current.position.y > 0)
       body.current.position.y -= 0.05;
-
     if (boost && speed < 0.25) {
       speed += 0.05;
     } else {
       if (speed > 0.1) speed -= 0.05;
     }
 
-    if (reset) {
-      bodRot.current.rotation.set(0, 0, 0);
-      body.current.rotation.set(0, 0, 0);
-      body.current.position.set(0, 0.5, 0);
-    }
-
-    if (pitchLeft) body.current.rotation.y += 0.05;
-    if (pitchRight) body.current.rotation.y -= 0.05;
-
-    // revert
-    if (bodRot.current.rotation.x != 0) {
-      if (!forward && bodRot.current.rotation.x < 0)
-        bodRot.current.rotation.x += 0.01;
-      if (!backward && bodRot.current.rotation.x > 0)
-        bodRot.current.rotation.x -= 0.01;
-    }
-    if (bodRot.current.rotation.z != 0) {
-      if (!rightward && bodRot.current.rotation.z < 0)
-        bodRot.current.rotation.z += 0.01;
-      if (!leftward && bodRot.current.rotation.z > 0)
-        bodRot.current.rotation.z -= 0.01;
+    {
+      if (bodRot.current.rotation.x != 0) {
+        if (!forward && bodRot.current.rotation.x < 0)
+          bodRot.current.rotation.x += 0.01;
+        if (!backward && bodRot.current.rotation.x > 0)
+          bodRot.current.rotation.x -= 0.01;
+      }
+      if (bodRot.current.rotation.z != 0) {
+        if (!rightward && bodRot.current.rotation.z < 0)
+          bodRot.current.rotation.z += 0.01;
+        if (!leftward && bodRot.current.rotation.z > 0)
+          bodRot.current.rotation.z -= 0.01;
+      }
     }
 
     /**
@@ -147,6 +123,13 @@ export function Drone(props) {
       wing2.current.rotation.y += 1;
       wing3.current.rotation.y += 1;
       wing4.current.rotation.y += 1;
+    }
+
+    //reset
+    if (reset) {
+      bodRot.current.rotation.set(0, 0, 0);
+      body.current.rotation.set(0, 0, 0);
+      body.current.position.set(0, 0.5, 0);
     }
   });
   return (
