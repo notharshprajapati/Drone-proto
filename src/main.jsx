@@ -4,8 +4,9 @@ import { Canvas } from "@react-three/fiber";
 import "./index.css";
 import App from "./App";
 import { KeyboardControls } from "@react-three/drei";
-import Interface from "./Interface";
+import Interface from "./components/Interface";
 import { Fog } from "three";
+import { COLORS } from "./components/colors";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <KeyboardControls
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       { name: "leftward", keys: ["ArrowLeft"] },
       { name: "rightward", keys: ["ArrowRight"] },
       { name: "reset", keys: ["KeyR"] },
+      { name: "Cam", keys: ["KeyF"] },
       { name: "boost", keys: ["Shift"] },
     ]}
   >
@@ -26,8 +28,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       shadows
       camera={{ position: [0, 0, 10] }}
       onCreated={(state) => {
-        state.gl.setClearColor("#a0a6d4");
-        state.scene.fog = new Fog("#a0a6d4", 1, 20);
+        state.gl.setClearColor(COLORS.orange);
+        state.scene.fog = new Fog(COLORS.orange, 1, 20);
       }}
     >
       <Suspense fallback={null}>

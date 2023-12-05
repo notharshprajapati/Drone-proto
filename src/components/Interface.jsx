@@ -44,6 +44,9 @@ export default function Interface() {
             <div className={`key ${reset ? "active" : ""}`}>
               <div className="ltr">R</div>
             </div>
+            <div className={`key ${reset ? "active" : ""}`}>
+              <div className="ltr">F</div>
+            </div>
           </div>
         </div>
         <div className="controls">
