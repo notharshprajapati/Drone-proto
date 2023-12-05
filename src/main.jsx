@@ -6,16 +6,6 @@ import App from "./App";
 import { KeyboardControls } from "@react-three/drei";
 import Interface from "./Interface";
 import { Fog } from "three";
-import {
-  Bloom,
-  ChromaticAberration,
-  EffectComposer,
-  HueSaturation,
-  Noise,
-  Scanline,
-  Vignette,
-} from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <KeyboardControls
@@ -43,21 +33,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Suspense fallback={null}>
         <App />
       </Suspense>
-      <EffectComposer>
-        <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} height={216} />
-        <Noise opacity={0.05} />
-        <Vignette eskil={false} offset={0.1} darkness={0.9} />
-        <ChromaticAberration
-          opacity={0.2}
-          blendFunction={BlendFunction.NORMAL} // blend mode
-          offset={[0.001, 0.001]} // color offset
-        />
-        <Scanline
-          opacity={0.2}
-          blendFunction={BlendFunction.OVERLAY} // blend mode
-          density={2} // scanline density
-        />
-      </EffectComposer>
     </Canvas>
     <Interface />
   </KeyboardControls>
