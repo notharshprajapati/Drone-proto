@@ -7,6 +7,7 @@ import { KeyboardControls } from "@react-three/drei";
 import Interface from "./components/Interface";
 import { Fog } from "three";
 import { COLORS } from "./components/colors";
+import MiniMap from "./components/MiniMap";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <KeyboardControls
@@ -35,6 +36,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Suspense fallback={null}>
         <App />
       </Suspense>
+      <MiniMap
+        onCreated={(state) => {
+          state.gl.setClearColor(COLORS.orange);
+          state.scene.fog = new Fog(COLORS.orange, 1, 0);
+        }}
+      />
     </Canvas>
     <Interface />
   </KeyboardControls>
