@@ -7,10 +7,10 @@ export function Podium1(props) {
     <group {...props} dispose={null}>
       <mesh
         geometry={nodes.Podium_1.geometry}
-        material={materials["mid grey"]}
         position={[0, 0.2, 0]}
         castShadow
       >
+        <meshStandardMaterial attach="material" />
         <group position={[0, 0.3, 0]}>
           <mesh
             geometry={nodes.Body_1.geometry}
@@ -32,19 +32,21 @@ export function Podium1(props) {
             position={[0, 1.64, 0.136]}
           />
         </group>
-        <mesh
-          geometry={nodes["this"].geometry}
-          material={materials.black}
-          position={[1.097, 2.254, 0]}
-        >
+        <group>
           <mesh
-            geometry={nodes.Text.geometry}
-            material={materials["off white"]}
-            position={[0.24, 0.098, 0.017]}
-            rotation={[Math.PI / 2, 0.262, 0]}
-            scale={[1, 0.538, 1]}
-          />
-        </mesh>
+            geometry={nodes["this"].geometry}
+            material={materials.black}
+            position={[1.097, 2.254, 0]}
+          >
+            <mesh
+              geometry={nodes.Text.geometry}
+              material={materials["off white"]}
+              position={[0.24, 0.098, 0.017]}
+              rotation={[Math.PI / 2, 0.262, 0]}
+              scale={[1, 0.538, 1]}
+            />
+          </mesh>
+        </group>
       </mesh>
     </group>
   );

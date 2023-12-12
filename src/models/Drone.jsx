@@ -1,10 +1,27 @@
 import React, { useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, applyProps } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import * as THREE from "three";
 export function Drone(props) {
   const { nodes, materials } = useGLTF("/assets/models/drone.glb");
+  //emi material
+
+  applyProps(materials.red, {
+    emissiveIntensity: 5,
+    toneMapped: false,
+  });
+  applyProps(materials.blue, {
+    emissiveIntensity: 5,
+    toneMapped: false,
+  });
+  const glassMaterial = new THREE.MeshStandardMaterial({
+    color: "#000", // Set the color of the glass
+    metalness: 1,
+    roughness: 0.5,
+    transparent: true, // Enable transparency
+    opacity: 0.9, // Set the opacity level (adjust as needed)
+  });
 
   //refs
   const body = useRef();
@@ -65,7 +82,8 @@ export function Drone(props) {
       body.current.position.x += speed * Math.cos(angle);
       body.current.position.z -= speed * Math.sin(angle);
     }
-    if (upward && body.current.position.y < 5) body.current.position.y += 0.025;
+    if (upward && body.current.position.y < 10)
+      body.current.position.y += 0.025;
     if (downward && body.current.position.y > 0)
       body.current.position.y -= 0.05;
     if (boost && speed < 0.25) {
@@ -209,7 +227,7 @@ export function Drone(props) {
           </group>
           <mesh geometry={nodes.red.geometry} material={materials.red} />
           <mesh geometry={nodes.tail_1.geometry} material={materials.cam} />
-          <mesh geometry={nodes.tail_2.geometry} material={materials.tail} />
+          <mesh geometry={nodes.tail_2.geometry} material={glassMaterial} />
         </mesh>
       </group>
     </group>

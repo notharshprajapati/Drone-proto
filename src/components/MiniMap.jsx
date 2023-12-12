@@ -50,7 +50,7 @@ function MiniMap() {
       <OrthographicCamera
         ref={miniMapCameraRef}
         makeDefault={false}
-        zoom={25}
+        zoom={100}
         position={[0, 0, -5]}
         rotation={[-Math.PI / 2, 0, 0]} // Rotate to look downwards
         left={(frustumSize * aspect) / -2}
@@ -60,19 +60,6 @@ function MiniMap() {
         far={1000}
         near={0.1}
       />
-      {/* <PerspectiveCamera
-        ref={miniMapCameraRef}
-        makeDefault={false}
-        zoom={4}
-        position={[100, 0, 100]}
-        // rotation={[-0.1, 0, 0]}
-        left={(frustumSize * aspect) / -2}
-        right={(frustumSize * aspect) / 2}
-        top={frustumSize / 2.1}
-        bottom={frustumSize / -2}
-        far={1000}
-        near={0.1}
-      /> */}
     </>
   );
 }
