@@ -58,10 +58,10 @@ export function Drone(props) {
     } = getKeys();
 
     if (!trigger && cam) setTrigger(true);
+
     if (trigger && !cam) {
       if (view == 2) setView(0);
       else setView(view + 1);
-      console.log(view);
       setTrigger(false);
     }
 
@@ -98,11 +98,12 @@ export function Drone(props) {
       body.current.position.y += 0.025;
     if (downward && body.current.position.y > 0)
       body.current.position.y -= 0.05;
-    if (boost && speed < 0.25) {
-      speed += 0.05;
-    } else {
-      if (speed > 0.1) speed -= 0.05;
-    }
+
+    // if (boost && speed < 0.25) {
+    //   speed += 0.05;
+    // } else {
+    //   if (speed > 0.1) speed -= 0.05;
+    // }
 
     {
       if (bodRot.current.rotation.x != 0) {
@@ -185,6 +186,7 @@ export function Drone(props) {
     //reset
     if (reset) {
       setView(2);
+      speed = 0.1;
       bodRot.current.rotation.set(0, 0, 0);
       body.current.rotation.set(0, 0, 0);
       body.current.position.set(0, 0.5, 0);
@@ -196,91 +198,86 @@ export function Drone(props) {
         <mesh
           geometry={nodes.body.geometry}
           material={materials.body}
-          castShadow
+          position={[-0.001, 0.262, 0.127]}
+        />
+        <mesh
+          geometry={nodes.blue.geometry}
+          material={materials.blue}
+          position={[0, 0.278, -0.117]}
+        />
+        <group
+          scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
+          position={[-0.001, 0.461, 0.254]}
         >
+          <mesh geometry={nodes.cam_1.geometry} material={materials.cam} />
+          <mesh geometry={nodes.cam_2.geometry} material={materials.metal} />
+          <mesh geometry={nodes.cam_3.geometry} material={glassMaterial} />
+        </group>
+        <mesh
+          geometry={nodes.legs.geometry}
+          material={materials.metal}
+          position={[-0.003, 0.219, -0.248]}
+        />
+        <group position={[-0.48, 0.308, 0.376]}>
+          <mesh geometry={nodes.motors.geometry} material={materials.metal} />
+          <mesh geometry={nodes.motors_1.geometry} material={materials.gold} />
+        </group>
+        <group position={[0.48, 0.423, -0.425]} ref={wing1}>
+          <mesh geometry={nodes.wing1_1.geometry} material={materials.fan} />
+          <mesh geometry={nodes.wing1_2.geometry} material={materials.gold} />
+        </group>
+        <group position={[-0.48, 0.424, -0.425]} ref={wing2}>
+          <mesh geometry={nodes.wing2_1.geometry} material={materials.fan} />
+          <mesh geometry={nodes.wing2_2.geometry} material={materials.gold} />
+        </group>
+        <group position={[-0.48, 0.424, 0.376]} ref={wing3}>
+          <mesh geometry={nodes.wing3_1.geometry} material={materials.fan} />
+          <mesh geometry={nodes.wing3_2.geometry} material={materials.gold} />
+        </group>
+        <group position={[0.481, 0.423, 0.376]} ref={wing4}>
+          <mesh geometry={nodes.wing4_1.geometry} material={materials.fan} />
+          <mesh geometry={nodes.wing4_2.geometry} material={materials.gold} />
+        </group>
+        <mesh
+          geometry={nodes.red.geometry}
+          material={materials.red}
+          position={[-0.009, 0.301, -0.003]}
+        />
+        <group position={[0.48, 0.314, -0.425]}>
           <mesh
-            geometry={nodes.blue.geometry}
-            material={materials.blue}
-            position={[0, 0.246, -0.165]}
-          />
-          <mesh
-            scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
-            geometry={nodes.cam.geometry}
-            material={materials.cam}
-          >
-            <mesh
-              geometry={nodes.lens.geometry}
-              material={materials.metal}
-              position={[0, 0.463, 0.199]}
-            />
-          </mesh>
-          <mesh
-            geometry={nodes.legs.geometry}
+            geometry={nodes.motors004.geometry}
             material={materials.metal}
-            position={[0, 0.246, -0.165]}
-          />
-          <group position={[0, 0.377, -0.024]}>
-            <mesh
-              geometry={nodes.motors_1.geometry}
-              material={materials.metal}
-            />
-            <mesh
-              geometry={nodes.motors_2.geometry}
-              material={materials.gold}
-            />
-            <group position={[0.479, 0.047, -0.4]} ref={wing1}>
-              <mesh
-                geometry={nodes.wing1_1.geometry}
-                material={materials.fan}
-              />
-              <mesh
-                geometry={nodes.wing1_2.geometry}
-                material={materials.gold}
-              />
-            </group>
-            <group position={[-0.481, 0.047, -0.4]} ref={wing2}>
-              <mesh
-                geometry={nodes.wing2_1.geometry}
-                material={materials.fan}
-              />
-              <mesh
-                geometry={nodes.wing2_2.geometry}
-                material={materials.gold}
-              />
-            </group>
-            <group position={[-0.481, 0.047, 0.4]} ref={wing3}>
-              <mesh
-                geometry={nodes.wing3_1.geometry}
-                material={materials.fan}
-              />
-              <mesh
-                geometry={nodes.wing3_2.geometry}
-                material={materials.gold}
-              />
-            </group>
-            <group position={[0.481, 0.047, 0.4]} ref={wing4}>
-              <mesh
-                geometry={nodes.wing4_1.geometry}
-                material={materials.fan}
-              />
-              <mesh
-                geometry={nodes.wing4_2.geometry}
-                material={materials.gold}
-              />
-            </group>
-          </group>
-          <mesh geometry={nodes.red.geometry} material={materials.red} />
-          <mesh
-            scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
-            geometry={nodes.tail_1.geometry}
-            material={materials.cam}
           />
           <mesh
-            scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
-            geometry={nodes.tail_2.geometry}
-            material={glassMaterial}
+            geometry={nodes.motors004_1.geometry}
+            material={materials.gold}
           />
-        </mesh>
+        </group>
+        <group position={[-0.48, 0.308, -0.425]}>
+          <mesh
+            geometry={nodes.motors008.geometry}
+            material={materials.metal}
+          />
+          <mesh
+            geometry={nodes.motors008_1.geometry}
+            material={materials.gold}
+          />
+        </group>
+        <group position={[0.48, 0.308, 0.376]}>
+          <mesh
+            geometry={nodes.motors012.geometry}
+            material={materials.metal}
+          />
+          <mesh
+            geometry={nodes.motors012_1.geometry}
+            material={materials.gold}
+          />
+        </group>
+        <mesh
+          geometry={nodes.camBase.geometry}
+          material={materials.cam}
+          position={[-0.001, 0.461, 0.254]}
+        />
       </group>
     </group>
   );

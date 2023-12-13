@@ -1,17 +1,16 @@
-import { OrthographicCamera, PerspectiveCamera } from "@react-three/drei";
+import { OrthographicCamera, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 
 function MiniMap() {
-  const miniMapCameraRef = useRef();
+  const camRef = useRef();
 
   const frustumSize = 500;
-  const aspect = window.innerWidth / window.innerHeight;
-
-  const miniMapLocationLeftPixels =
-    window.innerWidth - 8 - window.innerWidth * 0.2;
-  const miniMapLocationBottomPixels = 8;
-
+  const aspect = 1;
+  const miniMapLocationLeftPixels = 0;
+  const miniMapLocationBottomPixels = 0;
+  const [subscribeKeys, getKeys] = useKeyboardControls();
+  let speed = 0.1;
   useFrame(({ gl, scene, camera }) => {
     gl.autoClear = true;
     gl.setViewport(0, 0, window.innerWidth, window.innerHeight);
@@ -25,40 +24,78 @@ function MiniMap() {
     gl.setViewport(
       miniMapLocationLeftPixels,
       miniMapLocationBottomPixels,
-      window.innerWidth * 0.2,
-      window.innerHeight * 0.2
+      window.innerHeight * 0.25,
+      window.innerHeight * 0.25
     );
     gl.setScissor(
       miniMapLocationLeftPixels,
       miniMapLocationBottomPixels,
-      window.innerWidth * 0.2,
-      window.innerHeight * 0.2
+      window.innerHeight * 0.25,
+      window.innerHeight * 0.25
     );
     gl.setScissorTest(true);
-    // miniMapCameraRef.current.zoom = camera.zoom;
-    miniMapCameraRef.current.position.x = camera.position.x;
-    miniMapCameraRef.current.position.y = camera.position.y + 5;
-    miniMapCameraRef.current.position.z = camera.position.z - 10;
-    miniMapCameraRef.current.aspect = aspect;
-    miniMapCameraRef.current.updateMatrixWorld();
-    miniMapCameraRef.current.updateProjectionMatrix();
-    gl.render(scene, miniMapCameraRef.current);
+    const {
+      pitchLeft,
+      pitchRight,
+      forward,
+      backward,
+      leftward,
+      rightward,
+      reset,
+      boost,
+    } = getKeys();
+    if (pitchLeft) camRef.current.rotation.z += 0.05;
+    if (pitchRight) camRef.current.rotation.z -= 0.05;
+    const angle = camRef.current.rotation.z;
+    if (forward) {
+      camRef.current.position.x -= speed * Math.sin(angle);
+      camRef.current.position.z -= speed * Math.cos(angle);
+    }
+    if (backward) {
+      camRef.current.position.x += speed * Math.sin(angle);
+      camRef.current.position.z += speed * Math.cos(angle);
+    }
+    if (leftward) {
+      camRef.current.position.x -= speed * Math.cos(angle);
+      camRef.current.position.z += speed * Math.sin(angle);
+    }
+    if (rightward) {
+      camRef.current.position.x += speed * Math.cos(angle);
+      camRef.current.position.z -= speed * Math.sin(angle);
+    }
+
+    // if (boost && speed < 0.25) {
+    //   speed += 0.05;
+    // } else {
+    //   if (speed > 0.1) speed -= 0.05;
+    // }
+
+    if (reset) {
+      speed = 0.1;
+      camRef.current.rotation.z = 0;
+      camRef.current.position.set(0, 5, 0);
+    }
+
+    camRef.current.aspect = aspect;
+    camRef.current.updateMatrixWorld();
+    camRef.current.updateProjectionMatrix();
+    gl.render(scene, camRef.current);
   }, 1);
 
   return (
     <>
       <OrthographicCamera
-        ref={miniMapCameraRef}
+        ref={camRef}
         makeDefault={false}
-        zoom={100}
-        position={[0, 0, -5]}
+        zoom={50}
+        position={[0, 5, 0]}
         rotation={[-Math.PI / 2, 0, 0]} // Rotate to look downwards
         left={(frustumSize * aspect) / -2}
         right={(frustumSize * aspect) / 2}
-        top={frustumSize / 2.1}
+        top={frustumSize / 2}
         bottom={frustumSize / -2}
         far={1000}
-        near={0.1}
+        near={0.01}
       />
     </>
   );

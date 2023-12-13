@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Canvas } from "@react-three/fiber";
 import "./index.css";
 import App from "./App";
-import { KeyboardControls } from "@react-three/drei";
+import { ContactShadows, KeyboardControls } from "@react-three/drei";
 import Effects from "./components/Effects";
 import { Stats } from "@react-three/drei";
 import { Environment, Lightformer } from "@react-three/drei";
