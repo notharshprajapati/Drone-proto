@@ -31,6 +31,9 @@ export function Drone(props) {
   const wing3 = useRef();
   const wing4 = useRef();
 
+  const [view, setView] = useState(2);
+  const [trigger, setTrigger] = useState(false);
+
   //smooth cam variables
   const [smoothedCameraPosition] = useState(() => new THREE.Vector3(0, 1.5, 3));
   const [smoothedCameraTarget] = useState(() => new THREE.Vector3(0, 1.5, 0));
@@ -49,9 +52,18 @@ export function Drone(props) {
       backward,
       leftward,
       rightward,
+      cam,
       reset,
       boost,
     } = getKeys();
+
+    if (!trigger && cam) setTrigger(true);
+    if (trigger && !cam) {
+      if (view == 2) setView(0);
+      else setView(view + 1);
+      console.log(view);
+      setTrigger(false);
+    }
 
     /**
      * Movement
@@ -111,27 +123,54 @@ export function Drone(props) {
      * Camera
      */
     const bodyPosition = body.current.position;
-
-    const radius = 3; // adjust this value based on your scene size
     const angle = body.current.rotation.y;
+    let cameraPosition = new THREE.Vector3();
+    let cameraTarget = new THREE.Vector3();
 
-    const cameraPosition = new THREE.Vector3(
-      bodyPosition.x + radius * Math.sin(angle),
-      bodyPosition.y + 1,
-      bodyPosition.z + radius * Math.cos(angle)
-    );
+    if (view == 0) {
+      cameraPosition = new THREE.Vector3(
+        bodyPosition.x + -0.5 * Math.sin(angle),
+        bodyPosition.y,
+        bodyPosition.z + -0.5 * Math.cos(angle)
+      );
 
-    const cameraTarget = new THREE.Vector3(
-      bodyPosition.x,
-      bodyPosition.y + 1,
-      bodyPosition.z
-    );
+      cameraTarget = new THREE.Vector3(
+        bodyPosition.x - 10 * Math.sin(angle),
+        bodyPosition.y,
+        bodyPosition.z - 10 * Math.cos(angle)
+      );
+    } else if (view == 1) {
+      cameraPosition = new THREE.Vector3(
+        bodyPosition.x + 0.29 * Math.sin(angle),
+        bodyPosition.y + 0.5,
+        bodyPosition.z + 0.29 * Math.cos(angle)
+      );
+
+      cameraTarget = new THREE.Vector3(
+        bodyPosition.x - 10 * Math.sin(angle),
+        bodyPosition.y,
+        bodyPosition.z - 10 * Math.cos(angle)
+      );
+    } else {
+      cameraPosition = new THREE.Vector3(
+        bodyPosition.x + 3 * Math.sin(angle),
+        bodyPosition.y + 1,
+        bodyPosition.z + 3 * Math.cos(angle)
+      );
+      cameraTarget = new THREE.Vector3(
+        bodyPosition.x,
+        bodyPosition.y + 1,
+        bodyPosition.z
+      );
+    }
 
     smoothedCameraPosition.lerp(cameraPosition, 10 * delta);
     smoothedCameraTarget.lerp(cameraTarget, 10 * delta);
 
-    state.camera.position.copy(smoothedCameraPosition);
-    state.camera.lookAt(smoothedCameraTarget);
+    state.camera.position.copy(
+      view == 2 ? smoothedCameraPosition : cameraPosition
+    );
+    state.camera.lookAt(view == 2 ? smoothedCameraTarget : cameraTarget);
 
     /**
      * wing rotation
@@ -145,6 +184,7 @@ export function Drone(props) {
 
     //reset
     if (reset) {
+      setView(2);
       bodRot.current.rotation.set(0, 0, 0);
       body.current.rotation.set(0, 0, 0);
       body.current.position.set(0, 0.5, 0);
@@ -163,7 +203,11 @@ export function Drone(props) {
             material={materials.blue}
             position={[0, 0.246, -0.165]}
           />
-          <mesh geometry={nodes.cam.geometry} material={materials.cam}>
+          <mesh
+            scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
+            geometry={nodes.cam.geometry}
+            material={materials.cam}
+          >
             <mesh
               geometry={nodes.lens.geometry}
               material={materials.metal}
@@ -226,8 +270,16 @@ export function Drone(props) {
             </group>
           </group>
           <mesh geometry={nodes.red.geometry} material={materials.red} />
-          <mesh geometry={nodes.tail_1.geometry} material={materials.cam} />
-          <mesh geometry={nodes.tail_2.geometry} material={glassMaterial} />
+          <mesh
+            scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
+            geometry={nodes.tail_1.geometry}
+            material={materials.cam}
+          />
+          <mesh
+            scale={view == 2 ? [1, 1, 1] : [0, 0, 0]}
+            geometry={nodes.tail_2.geometry}
+            material={glassMaterial}
+          />
         </mesh>
       </group>
     </group>

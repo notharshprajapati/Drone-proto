@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       { name: "leftward", keys: ["ArrowLeft"] },
       { name: "rightward", keys: ["ArrowRight"] },
       { name: "reset", keys: ["KeyR"] },
-      { name: "Cam", keys: ["KeyF"] },
+      { name: "cam", keys: ["KeyF"] },
       { name: "boost", keys: ["Shift"] },
     ]}
   >

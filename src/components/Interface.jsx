@@ -20,6 +20,7 @@ export default function Interface() {
   const pitchRight = useKeyboardControls((state) => state.pitchRight);
   const reset = useKeyboardControls((state) => state.reset);
   const boost = useKeyboardControls((state) => state.boost);
+  const cam = useKeyboardControls((state) => state.cam);
 
   return (
     <div className="interface">
@@ -44,7 +45,7 @@ export default function Interface() {
             <div className={`key ${reset ? "active" : ""}`}>
               <div className="ltr">R</div>
             </div>
-            <div className={`key ${reset ? "active" : ""}`}>
+            <div className={`key ${cam ? "active" : ""}`}>
               <div className="ltr">F</div>
             </div>
           </div>
