@@ -1,6 +1,7 @@
 import { OrthographicCamera, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
+import * as THREE from "three";
 
 function MiniMap() {
   const camRef = useRef();
@@ -9,31 +10,34 @@ function MiniMap() {
   const aspect = 1;
   const miniMapLocationLeftPixels = 0;
   const miniMapLocationBottomPixels = 0;
+  const viewport = new THREE.Vector4(
+    miniMapLocationLeftPixels,
+    miniMapLocationBottomPixels,
+    window.innerHeight * 0.25,
+    window.innerHeight * 0.25
+  );
+
+  const scissor = new THREE.Vector4(
+    miniMapLocationLeftPixels,
+    miniMapLocationBottomPixels,
+    window.innerHeight * 0.25,
+    window.innerHeight * 0.25
+  );
+
   const [subscribeKeys, getKeys] = useKeyboardControls();
   let speed = 0.1;
   useFrame(({ gl, scene, camera }) => {
-    gl.autoClear = true;
     gl.setViewport(0, 0, window.innerWidth, window.innerHeight);
     gl.setScissor(0, 0, window.innerWidth, window.innerHeight);
-    gl.setScissorTest(true);
     gl.render(scene, camera);
     gl.autoClear = false;
     gl.clearDepth();
 
     // render minicamera
-    gl.setViewport(
-      miniMapLocationLeftPixels,
-      miniMapLocationBottomPixels,
-      window.innerHeight * 0.25,
-      window.innerHeight * 0.25
-    );
-    gl.setScissor(
-      miniMapLocationLeftPixels,
-      miniMapLocationBottomPixels,
-      window.innerHeight * 0.25,
-      window.innerHeight * 0.25
-    );
+    gl.setViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+    gl.setScissor(scissor.x, scissor.y, scissor.z, scissor.w);
     gl.setScissorTest(true);
+    const keys = getKeys();
     const {
       pitchLeft,
       pitchRight,
@@ -43,25 +47,27 @@ function MiniMap() {
       rightward,
       reset,
       boost,
-    } = getKeys();
+    } = keys;
+
     if (pitchLeft) camRef.current.rotation.z += 0.05;
     if (pitchRight) camRef.current.rotation.z -= 0.05;
-    const angle = camRef.current.rotation.z;
+    const sinAngle = Math.sin(camRef.current.rotation.z);
+    const cosAngle = Math.cos(camRef.current.rotation.z);
     if (forward) {
-      camRef.current.position.x -= speed * Math.sin(angle);
-      camRef.current.position.z -= speed * Math.cos(angle);
+      camRef.current.position.x -= speed * sinAngle;
+      camRef.current.position.z -= speed * cosAngle;
     }
     if (backward) {
-      camRef.current.position.x += speed * Math.sin(angle);
-      camRef.current.position.z += speed * Math.cos(angle);
+      camRef.current.position.x += speed * sinAngle;
+      camRef.current.position.z += speed * cosAngle;
     }
     if (leftward) {
-      camRef.current.position.x -= speed * Math.cos(angle);
-      camRef.current.position.z += speed * Math.sin(angle);
+      camRef.current.position.x -= speed * cosAngle;
+      camRef.current.position.z += speed * sinAngle;
     }
     if (rightward) {
-      camRef.current.position.x += speed * Math.cos(angle);
-      camRef.current.position.z -= speed * Math.sin(angle);
+      camRef.current.position.x += speed * cosAngle;
+      camRef.current.position.z -= speed * sinAngle;
     }
 
     // if (boost && speed < 0.25) {
@@ -71,14 +77,10 @@ function MiniMap() {
     // }
 
     if (reset) {
-      speed = 0.1;
       camRef.current.rotation.z = 0;
       camRef.current.position.set(0, 5, 0);
     }
 
-    camRef.current.aspect = aspect;
-    camRef.current.updateMatrixWorld();
-    camRef.current.updateProjectionMatrix();
     gl.render(scene, camRef.current);
   }, 1);
 
@@ -94,8 +96,8 @@ function MiniMap() {
         right={(frustumSize * aspect) / 2}
         top={frustumSize / 2}
         bottom={frustumSize / -2}
-        far={1000}
-        near={0.01}
+        far={5}
+        near={1}
       />
     </>
   );

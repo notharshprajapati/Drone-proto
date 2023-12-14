@@ -7,7 +7,7 @@ import { PerspectiveCamera } from "@react-three/drei";
 function App() {
   return (
     <>
-      <PerspectiveCamera makeDefault={true} />
+      <PerspectiveCamera makeDefault={true} far={20} near={0.1} />
       <Drone position={[0, 0.5, 0]} />
       <Ground />
       <Models />

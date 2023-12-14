@@ -3,10 +3,12 @@ import ReactDOM from "react-dom/client";
 import { Canvas } from "@react-three/fiber";
 import "./index.css";
 import App from "./App";
-import { ContactShadows, KeyboardControls } from "@react-three/drei";
-import Effects from "./components/Effects";
-import { Stats } from "@react-three/drei";
-import { Environment, Lightformer } from "@react-three/drei";
+import {
+  KeyboardControls,
+  Stats,
+  Environment,
+  Lightformer,
+} from "@react-three/drei";
 import Interface from "./components/Interface";
 import MiniMap from "./components/MiniMap";
 
@@ -26,9 +28,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       { name: "boost", keys: ["Shift"] },
     ]}
   >
-    <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+    <Canvas>
       <fog attach="fog" args={["black", 0, 20]} />
-
       <Environment resolution={512}>
         <Lightformer
           intensity={2}
@@ -95,7 +96,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           onUpdate={(self) => self.lookAt(0, 0, 0)}
         />
       </Environment>
-      <Effects />
+      {/* <Effects /> */}
       <Suspense fallback={null}>
         <App />
         <Stats />

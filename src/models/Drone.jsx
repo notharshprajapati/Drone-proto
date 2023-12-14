@@ -70,29 +70,27 @@ export function Drone(props) {
      */
     if (pitchLeft) body.current.rotation.y += 0.05;
     if (pitchRight) body.current.rotation.y -= 0.05;
+    const bodSin = Math.sin(body.current.rotation.y);
+    const bodCos = Math.cos(body.current.rotation.y);
     if (forward) {
       if (bodRot.current.rotation.x > -0.25) bodRot.current.rotation.x -= 0.025;
-      const angle = body.current.rotation.y;
-      body.current.position.x -= speed * Math.sin(angle);
-      body.current.position.z -= speed * Math.cos(angle);
+      body.current.position.x -= speed * bodSin;
+      body.current.position.z -= speed * bodCos;
     }
     if (backward) {
       if (bodRot.current.rotation.x < 0.25) bodRot.current.rotation.x += 0.025;
-      const angle = body.current.rotation.y;
-      body.current.position.x += speed * Math.sin(angle);
-      body.current.position.z += speed * Math.cos(angle);
+      body.current.position.x += speed * bodSin;
+      body.current.position.z += speed * bodCos;
     }
     if (leftward) {
       if (bodRot.current.rotation.z < 0.25) bodRot.current.rotation.z += 0.025;
-      const angle = body.current.rotation.y;
-      body.current.position.x -= speed * Math.cos(angle);
-      body.current.position.z += speed * Math.sin(angle);
+      body.current.position.x -= speed * bodCos;
+      body.current.position.z += speed * bodSin;
     }
     if (rightward) {
       if (bodRot.current.rotation.z > -0.25) bodRot.current.rotation.z -= 0.025;
-      const angle = body.current.rotation.y;
-      body.current.position.x += speed * Math.cos(angle);
-      body.current.position.z -= speed * Math.sin(angle);
+      body.current.position.x += speed * bodCos;
+      body.current.position.z -= speed * bodSin;
     }
     if (upward && body.current.position.y < 10)
       body.current.position.y += 0.025;
@@ -124,39 +122,40 @@ export function Drone(props) {
      * Camera
      */
     const bodyPosition = body.current.position;
-    const angle = body.current.rotation.y;
+    const camSin = Math.sin(body.current.rotation.y);
+    const camCos = Math.cos(body.current.rotation.y);
     let cameraPosition = new THREE.Vector3();
     let cameraTarget = new THREE.Vector3();
 
     if (view == 0) {
       cameraPosition = new THREE.Vector3(
-        bodyPosition.x + -0.5 * Math.sin(angle),
+        bodyPosition.x + -0.5 * camSin,
         bodyPosition.y,
-        bodyPosition.z + -0.5 * Math.cos(angle)
+        bodyPosition.z + -0.5 * camCos
       );
 
       cameraTarget = new THREE.Vector3(
-        bodyPosition.x - 10 * Math.sin(angle),
+        bodyPosition.x - 10 * camSin,
         bodyPosition.y,
-        bodyPosition.z - 10 * Math.cos(angle)
+        bodyPosition.z - 10 * camCos
       );
     } else if (view == 1) {
       cameraPosition = new THREE.Vector3(
-        bodyPosition.x + 0.29 * Math.sin(angle),
+        bodyPosition.x + 0.29 * camSin,
         bodyPosition.y + 0.5,
-        bodyPosition.z + 0.29 * Math.cos(angle)
+        bodyPosition.z + 0.29 * camCos
       );
 
       cameraTarget = new THREE.Vector3(
-        bodyPosition.x - 10 * Math.sin(angle),
+        bodyPosition.x - 10 * camSin,
         bodyPosition.y,
-        bodyPosition.z - 10 * Math.cos(angle)
+        bodyPosition.z - 10 * camCos
       );
     } else {
       cameraPosition = new THREE.Vector3(
-        bodyPosition.x + 3 * Math.sin(angle),
+        bodyPosition.x + 3 * camSin,
         bodyPosition.y + 1,
-        bodyPosition.z + 3 * Math.cos(angle)
+        bodyPosition.z + 3 * camCos
       );
       cameraTarget = new THREE.Vector3(
         bodyPosition.x,
